@@ -37,7 +37,7 @@ public class ExploMultiSendMessageBehaviour extends OneShotBehaviour{
 
 	public void action() {
 		
-		String[] receivers = {"Explo1","Explo2"}; //list of localname
+		String[] receivers = {"Explo1","Explo2","Collect1","Tanker1"}; //list of localname
 		//1°Create the message
 		final ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setSender(this.myAgent.getAID());

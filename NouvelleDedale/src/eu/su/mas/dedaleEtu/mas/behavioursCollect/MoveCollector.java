@@ -8,6 +8,7 @@ import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.CollectorMultiAgent;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import jade.core.behaviours.OneShotBehaviour;
@@ -15,10 +16,10 @@ import jade.core.behaviours.OneShotBehaviour;
 public class MoveCollector extends OneShotBehaviour{
 	private static final long serialVersionUID = 2019355514537795289L;
 	private int next = 0;
-	private CollectorMultiAgent monAgent;
+	private BasicAgent monAgent;
 	public MoveCollector(final AbstractDedaleAgent myagent) {
 	    this.myAgent = myagent;
-	    monAgent = (CollectorMultiAgent) myagent;
+	    monAgent = (BasicAgent) myagent;
 	}
 	//dubut de l'action
     public void action() {

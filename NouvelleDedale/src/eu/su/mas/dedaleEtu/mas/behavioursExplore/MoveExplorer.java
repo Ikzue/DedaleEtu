@@ -23,6 +23,8 @@ public class MoveExplorer extends OneShotBehaviour{
 	//dubut de l'action
     public void action() {
     	System.out.println(this.myAgent.getLocalName()+ " execute le comportement Move.");
+    	System.out.println(this.myAgent.getLocalName()+ " openNodes"+ monAgent.openNodes);
+    	System.out.println(this.myAgent.getLocalName()+ " closedNodes"+ monAgent.closedNodes);
     	
 		if(monAgent.myMap==null)
 			monAgent.myMap= new MapRepresentation();
@@ -46,7 +48,7 @@ public class MoveExplorer extends OneShotBehaviour{
 			//3) while openNodes is not empty 
 			if (monAgent.openNodes.size()==0){
 				//test
-				System.out.println();System.out.println("*****************Exploration successufully done.****************************************************");					System.out.println();
+				System.out.println();System.out.println(monAgent.getLocalName()+"*********Exploration successufully done.****************************************************");					System.out.println();
 				//choisir une position directement accessible, sauf la position actuelle
 				choixPosDirectAccessibleAlea(lobs,myPosition);
 			}else{
@@ -57,7 +59,21 @@ public class MoveExplorer extends OneShotBehaviour{
 				
                 //si l'agent n'a pas reussi a se deplacer et que le testInterBllocage a reussit alors l'agent est dans un interblocage
 				Boolean succes = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
-                if (!succes && testInterBlocage(nextNode,myPosition)) next=8;
+                if (!succes) { 
+                	if (testInterBlocage(nextNode,myPosition)) {
+                		monAgent.destination = nextNode;
+                		next=8;
+                	}else {
+            			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);    
+                	}
+                }else {
+                	/*
+                	 * sans cette phrase , dans le cas ou le graphe est une chaine, il se peut que les agents ne saivent pas qu'ils ont fini l'exploration
+                	 */
+                    //remove current node from open list and add to closedNodes
+        			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);     
+                }
+                
 			}
 			//endif
 		}

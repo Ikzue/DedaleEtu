@@ -2,6 +2,8 @@ package eu.su.mas.dedaleEtu.mas.behavioursCommon;
 
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.CollectorMultiAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -15,12 +17,20 @@ public class IntegrerCarte extends OneShotBehaviour{
 	 */
 	public IntegrerCarte(final AbstractDedaleAgent myagent) {
 		super(myagent);
+	    monAgent = (BasicAgent) myagent;
 	}
 	public void action() {
+		int i = 0;
+		i++;
+		System.out.println("test "+i);
 		if (!monAgent.yourCarte.equals("")) {
 			System.out.println(this.myAgent.getLocalName()+" integrer une carte ");
 			System.out.println("Carte avant:");
 			System.out.print("closedNodes :");
+			
+			i++;
+			System.out.println("test "+i);
+			
 			for (String nc:monAgent.closedNodes) {
 				System.out.print(nc);
 			}
@@ -30,6 +40,9 @@ public class IntegrerCarte extends OneShotBehaviour{
 				System.out.print(no);
 			}
 			System.out.println();
+			
+			i++;
+			System.out.println("test "+i);
 			
 			try {
 				// traitement de la chaine de caractere
@@ -81,5 +94,6 @@ public class IntegrerCarte extends OneShotBehaviour{
 			}
 			System.out.println();
 		}
+		System.out.println("test end");
 	}
 }

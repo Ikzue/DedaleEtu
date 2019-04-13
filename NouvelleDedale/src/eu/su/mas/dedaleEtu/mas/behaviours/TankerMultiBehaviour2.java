@@ -1,7 +1,7 @@
 package eu.su.mas.dedaleEtu.mas.behaviours;
 
+import java.io.IOException;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
-import eu.su.mas.dedaleEtu.mas.behavioursCollect.MoveCollector;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.DemandeCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.EnvoieCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ExploMultiSendMessageBehaviour;
@@ -10,6 +10,8 @@ import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocage;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocagePriorite;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.RecevoirMessage;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.Repondre;
+import eu.su.mas.dedaleEtu.mas.behavioursExplore.MoveExplorer;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.behaviours.FSMBehaviour;
 
 
@@ -25,20 +27,20 @@ import jade.core.behaviours.FSMBehaviour;
  * @author hc
  *
  */
-public class CollectorMultiBehaviour extends FSMBehaviour {
+public class TankerMultiBehaviour2 extends FSMBehaviour {
 	private static final long serialVersionUID = 8567689731496787661L;
 	/**
 	 * Current knowledge of the agent regarding the environment
 	 */
-	
-	public CollectorMultiBehaviour(final AbstractDedaleAgent myagent) {
-		super(myagent);
 
+	
+	public TankerMultiBehaviour2(final AbstractDedaleAgent myagent, final MapRepresentation myMap) {
+		super(myagent);
 		//states
 		this.registerFirstState(new RecevoirMessage(myagent),"recevoirMessage");
 		this.registerState(new ExploMultiSendMessageBehaviour(myagent), "IsAnyoneThere?");
-		this.registerState(new MoveCollector(myagent), "move");
-		this.registerState(new Repondre(myagent), "sendI'mHere!");		System.out.println();
+		this.registerState(new MoveExplorer(myagent), "move");
+		this.registerState(new Repondre(myagent), "sendI'mHere!");
 		this.registerState(new DemandeCarte(myagent), "demandeCarte");
 		this.registerState(new EnvoieCarte(myagent),"envoieCarte");
 		this.registerState(new IntegrerCarte(myagent), "integrerCarte");
@@ -49,7 +51,7 @@ public class CollectorMultiBehaviour extends FSMBehaviour {
 		this.registerDefaultTransition("move", "IsAnyoneThere?");
 		this.registerDefaultTransition("IsAnyoneThere?", "recevoirMessage");
 		this.registerTransition("recevoirMessage","sendI'mHere!",4);   //receive: IsAnyoneThere?    
-		this.registerDefaultTransition("sendI'mHere!", "demandeCarte");    // apres avoir envoyer "I'm here!", demander aussi la carte
+		this.registerDefaultTransition("sendI'mHere!", "demandeCarte");    // apres avoir envoyer "I'm here!", demander la carte
 		this.registerDefaultTransition("demandeCarte", "recevoirMessage");	// apres avoir envoyer une demande de carte, attendre le message
 		this.registerTransition("recevoirMessage","demandeCarte",6);    // receve:   I'm here! 	
 		this.registerTransition("recevoirMessage", "envoieCarte",3);
@@ -58,12 +60,11 @@ public class CollectorMultiBehaviour extends FSMBehaviour {
 		this.registerDefaultTransition("integrerCarte","recevoirMessage");
 		this.registerTransition("move", "protocoleInterBlocagePriorite", 8);
 		this.registerTransition("protocoleInterBlocage", "recevoirMessage",0);
-		this.registerTransition("protocoleInterBlocage", "move",1);
+		this.registerTransition("protocoleInterBlocage", "receiveMessage",1);
 		this.registerTransition("protocoleInterBlocagePriorite", "protocoleInterBlocage",2);
 		this.registerTransition("protocoleInterBlocagePriorite", "recevoirMessage",0);
-		this.registerTransition("protocoleInterBlocagePriorite", "move",1);
-
-
+		this.registerTransition("protocoleInterBlocagePriorite", "receiveMessage",1);
+		
 	}
 
 	@Override
@@ -72,5 +73,5 @@ public class CollectorMultiBehaviour extends FSMBehaviour {
 		myAgent.doDelete();
 		return super.onEnd();
 	}
-
+    
 }

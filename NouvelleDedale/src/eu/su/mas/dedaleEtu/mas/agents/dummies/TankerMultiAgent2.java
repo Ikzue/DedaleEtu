@@ -2,8 +2,12 @@ package eu.su.mas.dedaleEtu.mas.agents.dummies;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
-import eu.su.mas.dedaleEtu.mas.behaviours.CollectorMultiBehaviour;
+import eu.su.mas.dedaleEtu.mas.behaviours.ExploMultiBehaviour;
+import eu.su.mas.dedaleEtu.mas.behaviours.TankerMultiBehaviour2;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.behaviours.Behaviour;
 
 /**
@@ -16,9 +20,10 @@ import jade.core.behaviours.Behaviour;
  *
  */
 
-public class CollectorMultiAgent extends BasicAgent {
+public class TankerMultiAgent2 extends BasicAgent {
 
 	private static final long serialVersionUID = -6431752665590433727L;
+	public MapRepresentation myMap;
 	
 
 	/**
@@ -31,6 +36,7 @@ public class CollectorMultiAgent extends BasicAgent {
 	protected void setup(){
 
 		super.setup();
+		
 
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 		
@@ -39,7 +45,7 @@ public class CollectorMultiAgent extends BasicAgent {
 		 * ADD the behaviours of the Dummy Moving Agent
 		 * 
 		 ************************************************/
-		CollectorMultiBehaviour fsm = new CollectorMultiBehaviour(this);
+		TankerMultiBehaviour2 fsm = new TankerMultiBehaviour2(this,myMap);
 
 		
 		lb.add(fsm);

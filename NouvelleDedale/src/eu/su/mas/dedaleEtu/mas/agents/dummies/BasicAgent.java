@@ -19,7 +19,7 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 	 * Current knowledge of the agent regarding the environment
 	 */
     public MapRepresentation myMap;
-    
+    public String destination;
     public String yourCarte;
 	/**
 	 * Nodes known but not yet visited
