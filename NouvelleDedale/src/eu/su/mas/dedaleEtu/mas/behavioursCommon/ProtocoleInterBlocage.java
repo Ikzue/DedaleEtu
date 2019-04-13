@@ -1,6 +1,5 @@
 package eu.su.mas.dedaleEtu.mas.behavioursCommon;
-
-
+import java.lang.Math;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +40,11 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 		}
 		// 1.2) set message content	
 		Random n = new Random();
-		int monNbAlea = n.nextInt(200);
+		int monNbAlea = n.nextInt(999);
+		monNbAlea = Math.abs(monNbAlea);
+		//ajouter la priorite de l'agent
+		if (this.myAgent.getLocalName().contains("ollect"))            // collect sont prioritaire p/p explorateur  et Diamon > gold
+			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?10000:20000;
 		msg.setContent("InterBlocage:"+monNbAlea);
 		// 1.3) envoyer
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);
@@ -51,8 +54,8 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 			System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
 		}
 
-		// 2) attendre 500ms et retenu le max resu
-		int tempAttente = 500;
+		// 2) attendre 100ms et retenu le max resu
+		int tempAttente = 100;
 		long start = System.currentTimeMillis(); 
 		int max = monNbAlea;
 		int tonNbAlea;
@@ -110,10 +113,10 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					}
 				}
 			}
-			this.myAgent.doWait(500); // laisser passer
+			this.myAgent.doWait(100); // laisser passer
         }else {
         	long s = System.currentTimeMillis();
-    		while (!((AbstractDedaleAgent)this.myAgent).getCurrentPosition().equals(monAgent.destination) && System.currentTimeMillis()-s <500){
+    		while (!((AbstractDedaleAgent)this.myAgent).getCurrentPosition().equals(monAgent.destination) && System.currentTimeMillis()-s <100){
     			try{((AbstractDedaleAgent)this.myAgent).moveTo(monAgent.destination);}catch(Exception e){break;}   // TO Do: trouver l'erreur 
     		}
         }

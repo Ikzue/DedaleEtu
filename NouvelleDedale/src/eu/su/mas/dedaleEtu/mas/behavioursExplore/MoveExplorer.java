@@ -62,16 +62,22 @@ public class MoveExplorer extends OneShotBehaviour{
                 if (!succes) { 
                 	if (testInterBlocage(nextNode,myPosition)) {
                 		monAgent.destination = nextNode;
-                		next=8;
+                		next = 8;
+                /*		if (monAgent.nbProtocolePriorite<3) {
+                			next = 8; // essayer protocole avec protocole
+                		    monAgent.nbProtocolePriorite += 1;
+                		}*/
                 	}else {
-            			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);    
+            			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);
+            			monAgent.nbProtocolePriorite = 0;
                 	}
                 }else {
                 	/*
                 	 * sans cette phrase , dans le cas ou le graphe est une chaine, il se peut que les agents ne saivent pas qu'ils ont fini l'exploration
                 	 */
                     //remove current node from open list and add to closedNodes
-        			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);     
+        			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);    
+//      			monAgent.nbProtocolePriorite = 0;
                 }
                 
 			}

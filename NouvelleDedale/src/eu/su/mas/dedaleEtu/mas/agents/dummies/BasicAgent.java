@@ -18,6 +18,8 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 	/**
 	 * Current knowledge of the agent regarding the environment
 	 */
+	public int nbProtocolePriorite;  // nombre d'essais avec protocolePriorite
+	public int seuil = 3;    // si au bout de trois essais, protocolePriorite ne permet pas a resoudre l'interbolocage, on utilise protocole Alea
     public MapRepresentation myMap;
     public String destination;
     public String yourCarte;
@@ -53,5 +55,6 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 			this.tache = 10000;
 		else if(getLocalName().contains("Collect"))
 			this.tache = 20000;
+		nbProtocolePriorite = 0;
     }
 }

@@ -21,7 +21,6 @@ public class RecevoirMessage extends OneShotBehaviour{
 		monAgent = (BasicAgent)myagent;
 	}
 	public void action() {
-		this.myAgent.doWait(300);
 		//1) receive the message
 		MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
 		ACLMessage msg = this.myAgent.receive(msgTemplate);
