@@ -3,6 +3,7 @@ package eu.su.mas.dedaleEtu.mas.behavioursCollect;
 import java.util.Iterator;
 import java.util.List;
 
+
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
@@ -22,6 +23,7 @@ public class MoveCollector extends OneShotBehaviour{
 	//dubut de l'action
     public void action() {
     	System.out.println(this.myAgent.getLocalName()+ " execute le comportement Move.");
+    	
 		if(monAgent.myMap==null)
 			monAgent.myMap= new MapRepresentation();
 		//0) Retrieve the current position
@@ -31,43 +33,19 @@ public class MoveCollector extends OneShotBehaviour{
 			//List of observable from the agent's current position
 			List<Couple<String,List<Couple<Observation,Integer>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
 			System.out.println(lobs);
-			/**
-			 * Just added here to let you see what the agent is doing, otherwise he will be too quick
-			 */
-			try {
-				this.myAgent.doWait(500);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
+			//Just added here to let you see what the agent is doing, otherwise he will be too quick
+			agent_wait(500);
 
 			//1) remove the current node from openlist and add it to closedNodes.
 			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);
-			//2) get the surrounding nodes and, if not in closedNodes, add them to open nodes.
-			String nextNode=null;
-			Iterator<Couple<String, List<Couple<Observation, Integer>>>> iter=lobs.iterator();
-			while(iter.hasNext()){
-				String nodeId=iter.next().getLeft();
-				if (!monAgent.closedNodes.contains(nodeId)){
-					if (!monAgent.openNodes.contains(nodeId)){
-						monAgent.openNodes.add(nodeId);
-						monAgent.myMap.addNode(nodeId, MapAttribute.open);
-						monAgent.myMap.addEdge(myPosition, nodeId);	
-					}else{
-						//the node exist, but not necessarily the edge
-						monAgent.myMap.addEdge(myPosition, nodeId);
-					}
-				    if (nextNode==null) nextNode=nodeId;
-				}
-			}
+			
+			//2) get the surrounding nodes and, if not in closedNodes, add them to open nodes, and return a directly accessible openNode
+			String nextNode = majGrapheOpenNodesClosedNodes(lobs,myPosition);
+			
 			//2.5)Add Treasures
-			iter=lobs.iterator();
-			Couple<String, List<Couple<Observation, Integer>>> pos;
-			List<Couple<Observation, Integer>> listobs;
-			String isItTreasure;
-			while(iter.hasNext()){
-				pos = iter.next();
-				ajoutNoeudSiTresor2(pos);
-			}
+			majTreasureNodes(lobs);
+
 			System.out.println("Noeuds TreasureNodes:");
 			System.out.println(monAgent.treasureNodes);
 			System.out.println("Noeuds myTreasureNodes");
@@ -80,7 +58,7 @@ public class MoveCollector extends OneShotBehaviour{
 	            	if(monAgent.prochainTresor == null) {
 	            		monAgent.prochainTresor = monAgent.myTreasureNodes.keySet().iterator().next();
 	            	}
-	            	listobs = monAgent.myTreasureNodes.get(monAgent.prochainTresor);
+	            	List<Couple<Observation, Integer>>  listobs = monAgent.myTreasureNodes.get(monAgent.prochainTresor);
 	            	if(myPosition.equals(monAgent.prochainTresor)) {
 	            		System.out.println("L'agent ramasse:");
 	            		openTreasure(listobs);
@@ -103,32 +81,17 @@ public class MoveCollector extends OneShotBehaviour{
 	            System.out.println("Noeud Tresor " + nextNode);
 				((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
 			}else{
+				
+				
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-				if (nextNode==null){
-					//no directly accessible openNode
-					//chose one, compute the path and take the first step.
-					nextNode=monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0)).get(0);
-				}else {
-				    ((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
-				}
+				moveToDirectlyAccessibleOpenNodeOrChosenNode(nextNode,myPosition,monAgent.openNodes);
 				
-				String myNewPosition = ((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
-				String myOldPosition = myPosition;
-				//si la position n'a pas changer alors on est peut-etre dans interblocage
-				if (myNewPosition.equals(myOldPosition)) {   //si apres moveTo la position n'a pas change
-					long start = System.currentTimeMillis();
-					while (myNewPosition.equals(myOldPosition) && System.currentTimeMillis()-start < 500){    //on essaie d'acceder au nextNode pendant 500ms
-						if (nextNode != null)
-							((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
-						myNewPosition = ((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
-					}	
-					if (myNewPosition.equals(myOldPosition)) {       //si on n'arrive toujours pas a changer d'aller a une autre position, alors on suppose que on est dans une situation d'interBlocage
-						next = 8;           //resoudre le blocage
-				    }
-				};
-
+				
+                //si l'agent n'a pas reussi a se deplacer et que le testInterBllocage a reussit alors l'agent est dans un interblocage
+				Boolean succes = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
+                if (!succes && testInterBlocage(nextNode,myPosition)) next=8;
 			}
 			//endif
 		}
@@ -174,5 +137,66 @@ public class MoveCollector extends OneShotBehaviour{
     //fin de l'action
 	public int onEnd() {
 		return next;
+	}
+	
+    private void agent_wait(int T) {
+		try {
+			this.myAgent.doWait(500);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    private String majGrapheOpenNodesClosedNodes(List<Couple<String, List<Couple<Observation, Integer>>>> lobs, String myPosition) {
+		String nextNode=null;
+		Iterator<Couple<String, List<Couple<Observation, Integer>>>> iter=lobs.iterator();		
+		while(iter.hasNext()){
+			String nodeId=iter.next().getLeft();
+			if (!monAgent.closedNodes.contains(nodeId)){
+				if (!monAgent.openNodes.contains(nodeId)){
+					monAgent.openNodes.add(nodeId);
+					monAgent.myMap.addNode(nodeId, MapAttribute.open);
+					monAgent.myMap.addEdge(myPosition, nodeId);	
+				}else{
+					//the node exist, but not necessarily the edge
+					monAgent.myMap.addEdge(myPosition, nodeId);
+				}
+			    if (nextNode==null) nextNode=nodeId;
+			}
+		}
+		return nextNode;
+    }
+    
+	private void majTreasureNodes(List<Couple<String, List<Couple<Observation, Integer>>>> lobs){
+		Iterator<Couple<String, List<Couple<Observation, Integer>>>> iter=lobs.iterator();
+		Couple<String, List<Couple<Observation, Integer>>> pos;
+		while(iter.hasNext()){
+			pos = iter.next();
+			ajoutNoeudSiTresor2(pos);
+		}
+	}
+	
+    private void moveToDirectlyAccessibleOpenNodeOrChosenNode(String nextNode,String myPosition,List<String> openNodes) {
+		if (nextNode==null){
+			//no directly accessible openNode
+			//chose one, compute the path and take the first step.
+			nextNode=monAgent.myMap.getShortestPath(myPosition, openNodes.get(0)).get(0);
+		}
+		((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+    }
+    
+    private Boolean testMovementSucces(String newPosition,String oldPosition) {
+    	return newPosition.equals(oldPosition)?false:true;
+    }
+    
+	private Boolean testInterBlocage(String nextNode,String myPosition) {
+		Boolean moveSucces = false;
+		long start = System.currentTimeMillis();
+		while (!moveSucces && System.currentTimeMillis()-start < 500){    //on essaie d'acceder au nextNode pendant 500ms
+			if (nextNode != null)
+				((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+			moveSucces = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
+		}	
+    return moveSucces?false:true;
 	}
 }

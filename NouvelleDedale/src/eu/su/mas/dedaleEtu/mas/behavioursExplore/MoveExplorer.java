@@ -32,7 +32,8 @@ public class MoveExplorer extends OneShotBehaviour{
 		if (myPosition!=null){
 			//List of observable from the agent's current position
 			List<Couple<String,List<Couple<Observation,Integer>>>> lobs=((AbstractDedaleAgent)this.myAgent).observe();//myPosition
-
+			System.out.println(lobs);
+			
 			//Just added here to let you see what the agent is doing, otherwise he will be too quick
 			agent_wait(500);
 			
@@ -40,7 +41,7 @@ public class MoveExplorer extends OneShotBehaviour{
 			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);
 			
 			//2) get the surrounding nodes and, if not in closedNodes, add them to open nodes, and return a directly accessible openNode
-			String nextNode = f1(lobs,myPosition);
+			String nextNode = majGrapheOpenNodesClosedNodes(lobs,myPosition);
 
 			//3) while openNodes is not empty 
 			if (monAgent.openNodes.size()==0){
@@ -52,7 +53,7 @@ public class MoveExplorer extends OneShotBehaviour{
 				//4) select next move.
 				//4.1 If there exist one open node directly reachable, go for it,
 				//	 otherwise choose one from the openNode list, compute the shortestPath and go for it
-                f2(nextNode,myPosition,monAgent.openNodes);
+				moveToDirectlyAccessibleOpenNodeOrChosenNode(nextNode,myPosition,monAgent.openNodes);
 				
                 //si l'agent n'a pas reussi a se deplacer et que le testInterBllocage a reussit alors l'agent est dans un interblocage
 				Boolean succes = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
@@ -79,7 +80,7 @@ public class MoveExplorer extends OneShotBehaviour{
 		}
     }
 	
-    private String f1(List<Couple<String, List<Couple<Observation, Integer>>>> lobs, String myPosition) {
+    private String majGrapheOpenNodesClosedNodes(List<Couple<String, List<Couple<Observation, Integer>>>> lobs, String myPosition) {
 		String nextNode=null;
 		Iterator<Couple<String, List<Couple<Observation, Integer>>>> iter=lobs.iterator();		
 		while(iter.hasNext()){
@@ -106,14 +107,13 @@ public class MoveExplorer extends OneShotBehaviour{
     	return nextNode;
     }
     
-    private void f2(String nextNode,String myPosition,List<String> openNodes) {
+    private void moveToDirectlyAccessibleOpenNodeOrChosenNode(String nextNode,String myPosition,List<String> openNodes) {
 		if (nextNode==null){
 			//no directly accessible openNode
 			//chose one, compute the path and take the first step.
 			nextNode=monAgent.myMap.getShortestPath(myPosition, openNodes.get(0)).get(0);
-		}else {
-		    ((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
 		}
+		((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
     }
     
     private Boolean testMovementSucces(String newPosition,String oldPosition) {
