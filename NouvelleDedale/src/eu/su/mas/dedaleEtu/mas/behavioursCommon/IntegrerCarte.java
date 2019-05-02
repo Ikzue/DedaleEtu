@@ -90,22 +90,7 @@ public class IntegrerCarte extends OneShotBehaviour{
 				try {
 					monAgent.tankerPosition = ss[3];
 				}catch(Exception e) {};
-			/*
-			System.out.println();
-			System.out.println("Apres:");
-			System.out.print("closedNodes:");
-			for (String nc:monAgent.closedNodes) {
-				System.out.print(nc+" ");
-			}				
-			System.out.println();
-			System.out.print("openNodes :");
-			for (String no:monAgent.openNodes) {
-				System.out.print(no+" ");
-			}
-			System.out.println();
-			*/
 		}
-		//System.out.println("test end");
 		
 	}
 }

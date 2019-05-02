@@ -57,20 +57,31 @@ public class MoveCollector extends OneShotBehaviour{
 	            	if(monAgent.prochainTresor == null) {
 	            		monAgent.prochainTresor = monAgent.myTreasureNodes.keySet().iterator().next();
 	            	}
+	            	System.out.println("test1"+" prochainTresor:" + monAgent.prochainTresor);
 	            	List<Couple<Observation, Integer>>  listobs = monAgent.myTreasureNodes.get(monAgent.prochainTresor);
+	            	System.out.println("val: "+monAgent.myTreasureNodes.get(monAgent.prochainTresor));
 	            	if(myPosition.equals(monAgent.prochainTresor)) {
 	            		//System.out.println("*****************L AGENT RAMASSE****************************************************");
+		            	System.out.println("test1.1");
 	            		openTreasure(listobs);
+		            	System.out.println("test1.2");
 	            		((AbstractDedaleAgent)this.myAgent).pick();
+		            	System.out.println("test1.3");
 	            		majTresor(monAgent.prochainTresor);
+		            	System.out.println("test1.4");
 	            		monAgent.prochainTresor = null;
+		            	System.out.println("test2");
 	            	}
 	            	else {
+		            	System.out.println("test2.9");
 	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
 		            	nextNode=getCheminTresor(myPosition).get(0);
+		            	System.out.println("test2.99");		            	
 			            moveToTreasure(myPosition);
+		            	System.out.println("test3");
 	            	}
 				}
+            	System.out.println("test4");
         		int spaceBackpack = ((AbstractDedaleAgent)this.myAgent).getBackPackFreeSpace();
         		int capacite = ((CollectorMultiAgent)this.myAgent).getBackpackCapacity();
         		if(spaceBackpack==0||(spaceBackpack!=capacite && monAgent.myTreasureNodes.isEmpty())) {
@@ -221,22 +232,6 @@ public class MoveCollector extends OneShotBehaviour{
 	private List<String> getCheminTresor(String myPosition){
 		monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor);
 		monAgent.destination = monAgent.prochainTresor;
-		return monAgent.chemin;
-	}
-	/*
-	private List<String> getChemin(String myPosition){
-		if (monAgent.chemin.isEmpty())
-			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
-		System.out.println(monAgent.chemin);
-		return monAgent.chemin;
-	}
-	private List<String> getCheminTresor(String myPosition){
-		if (monAgent.cheminTresor.isEmpty())
-			monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor); 
-		System.out.println("My position" + myPosition);
-		System.out.println("Prochain tresor" + monAgent.prochainTresor);
-		System.out.println(monAgent.cheminTresor);
 		return monAgent.cheminTresor;
 	}
-	*/
 }
