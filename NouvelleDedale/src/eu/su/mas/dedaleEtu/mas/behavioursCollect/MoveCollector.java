@@ -69,13 +69,6 @@ public class MoveCollector extends OneShotBehaviour{
 	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
 		            	nextNode=getCheminTresor(myPosition).get(0);
 			            moveToTreasure(myPosition);
-		            	monAgent.tache = 1000; // type or
-						for (Couple<Observation, Integer> obs : listobs ) {
-							if (obs.getLeft().getName().contains("Diamond")){
-								monAgent.tache = 2000;
-								break;
-							}	
-						}
 	            	}
 				}
         		int spaceBackpack = ((AbstractDedaleAgent)this.myAgent).getBackPackFreeSpace();

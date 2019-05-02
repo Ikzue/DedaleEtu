@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import dataStructures.tuple.Couple;
@@ -41,7 +42,7 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
     public Set<String> closedNodes;
     public String receiver;
 	
-    public int tache;
+    public int priorite;
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 
@@ -61,9 +62,11 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 		this.chemin = new ArrayList<String>();
 		this.cheminTresor = new ArrayList<String>();
 		if (getLocalName().contains("Explore"))
-			this.tache = 10000;
+			this.priorite = 100000;
 		else if(getLocalName().contains("Collect"))
-			this.tache = 20000;
+			this.priorite = 200000;
+		Random n = new Random();
+		this.priorite += n.nextInt(99999);
     }
     
     private void register() {

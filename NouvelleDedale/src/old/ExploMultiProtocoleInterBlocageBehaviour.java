@@ -21,7 +21,7 @@ import jade.lang.acl.ACLMessage;
 
 public class ExploMultiProtocoleInterBlocageBehaviour extends OneShotBehaviour {
 
-	private static final long serialVersionUID = 8567677731496787661L;
+	private static final long serialVersionUID = 8567677731491451L;
 
 	public ExploMultiProtocoleInterBlocageBehaviour(final AbstractDedaleAgent myagent) {
 		super(myagent);

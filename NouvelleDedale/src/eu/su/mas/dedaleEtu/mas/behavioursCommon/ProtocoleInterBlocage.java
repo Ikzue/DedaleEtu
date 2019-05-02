@@ -40,9 +40,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 			msg.addReceiver(new AID(receiver, AID.ISLOCALNAME));  
 		}
 		// 1.2) set message content	
-		Random n = new Random();
-		int monNbAlea = n.nextInt(999);
-		monNbAlea = Math.abs(monNbAlea);
+		int monNbAlea = monAgent.priorite;
 		//ajouter la priorite de l'agent
 		if (this.myAgent.getLocalName().contains("ollect"))            // collect sont prioritaire p/p explorateur  et Diamon > gold
 			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?300:600;
