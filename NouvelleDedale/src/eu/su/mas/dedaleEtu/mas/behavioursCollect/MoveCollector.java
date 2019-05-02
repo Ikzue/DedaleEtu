@@ -220,7 +220,13 @@ public class MoveCollector extends OneShotBehaviour{
 		}	
     return moveSucces?false:true;
 	}
-	
+	private List<String> getChemin(String myPosition){
+		return monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
+	}
+	private List<String> getCheminTresor(String myPosition){
+		return monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor); 
+	}
+	/*
 	private List<String> getChemin(String myPosition){
 		if (monAgent.chemin.isEmpty())
 			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
@@ -235,4 +241,5 @@ public class MoveCollector extends OneShotBehaviour{
 		System.out.println(monAgent.cheminTresor);
 		return monAgent.cheminTresor;
 	}
+	*/
 }
