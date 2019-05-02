@@ -42,7 +42,8 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
     public Set<String> closedNodes;
     public String receiver;
 	
-    public int priorite;
+    public int priorite = 0;
+    public int compteur = 10;
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 
@@ -61,12 +62,7 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 		this.prochainTresor = null;
 		this.chemin = new ArrayList<String>();
 		this.cheminTresor = new ArrayList<String>();
-		if (getLocalName().contains("Explore"))
-			this.priorite = 100000;
-		else if(getLocalName().contains("Collect"))
-			this.priorite = 200000;
-		Random n = new Random();
-		this.priorite += n.nextInt(99999);
+        this.priorite = genererPriorite();
     }
     
     private void register() {
@@ -117,6 +113,23 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 			e.printStackTrace();
 		}
     	return nameAgents;
+    }
+    public int genererPriorite() {
+    	if (compteur == 0) {
+			if(this.getLocalName().contains("Collect")) {
+				this.priorite = 500;
+			    Random n = new Random();
+			    this.priorite += n.nextInt(1000);
+			    return this.priorite;
+			};
+			if(this.getLocalName().contains("Tank")) {
+				this.priorite = this.priorite == 0? 10000:0;
+			    return this.priorite;
+			};
+    	}else {
+    		compteur -= 1;
+    	}
+        return this.priorite;
     }
 	public abstract String getType();
 }

@@ -40,10 +40,10 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 			msg.addReceiver(new AID(receiver, AID.ISLOCALNAME));  
 		}
 		// 1.2) set message content	
-		int monNbAlea = monAgent.priorite;
+		int monNbAlea = monAgent.genererPriorite();
 		//ajouter la priorite de l'agent
-		if (this.myAgent.getLocalName().contains("ollect"))            // collect sont prioritaire p/p explorateur  et Diamon > gold
-			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?300:600;
+//		if (this.myAgent.getLocalName().contains("ollect"))            // collect sont prioritaire p/p explorateur  et Diamon > gold
+//			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?300:600;
 		msg.setContent("InterBlocage:"+monNbAlea+":"+envoiCarte());
 		// 1.3) envoyer
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);
@@ -119,7 +119,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					}
 				}
 			}
-			this.myAgent.doWait(100); // laisser passer
+			this.myAgent.doWait(200); // laisser passer
         }else {
         	long s = System.currentTimeMillis();
     		while (!((AbstractDedaleAgent)this.myAgent).getCurrentPosition().equals(monAgent.destination) && System.currentTimeMillis()-s <100){

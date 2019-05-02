@@ -52,7 +52,7 @@ public class MoveCollector extends OneShotBehaviour{
 			//3) while openNodes is not empty, continues.
 			if (monAgent.openNodes.isEmpty()){
 				System.out.println();
-				System.out.println("*****************Exploration successufully done.****************************************************");
+				System.out.println(this.myAgent.getLocalName()+"*****************Exploration successufully done.****************************************************");
 	            if (!monAgent.myTreasureNodes.isEmpty()) {
 	            	if(monAgent.prochainTresor == null) {
 	            		monAgent.prochainTresor = monAgent.myTreasureNodes.keySet().iterator().next();
@@ -214,10 +214,14 @@ public class MoveCollector extends OneShotBehaviour{
     return moveSucces?false:true;
 	}
 	private List<String> getChemin(String myPosition){
-		return monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
+		monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
+		monAgent.destination = monAgent.openNodes.get(0);
+		return monAgent.chemin;
 	}
 	private List<String> getCheminTresor(String myPosition){
-		return monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor); 
+		monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor);
+		monAgent.destination = monAgent.prochainTresor;
+		return monAgent.chemin;
 	}
 	/*
 	private List<String> getChemin(String myPosition){

@@ -49,7 +49,7 @@ public class TankerEnvoieCarte extends OneShotBehaviour {
 		msg.setContent(myCarte);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
 		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
-        msg.setContent("InterBlocage:10000:"+myCarte);
+        msg.setContent("InterBlocage:"+monAgent.genererPriorite()+":"+myCarte);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
 		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());		
 		msg.setContent("Send me your map.");
