@@ -65,7 +65,6 @@ public class MoveCollector extends OneShotBehaviour{
 	            		openTreasure(listobs);
 	            		((AbstractDedaleAgent)this.myAgent).pick();
 	            		majTresor(monAgent.prochainTresor);
-	            		monAgent.prochainTresor = null;
 	            	}
 	            	else {
 	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
@@ -123,7 +122,8 @@ public class MoveCollector extends OneShotBehaviour{
 				if(obs.getLeft() == monAgent.getMyTreasureType()) {
 					monAgent.myTreasureNodes.put(pos.getLeft(), pos.getRight());
 					return;
-				}
+				}  
+				// TO DO :  garder aussi les noeudsTresor non accessibles
 			}
 		}
 	private void majTresor(String prochainTresor) {

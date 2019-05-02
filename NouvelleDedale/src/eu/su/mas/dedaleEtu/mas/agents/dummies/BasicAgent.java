@@ -31,6 +31,7 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 	 */
     public List<String> openNodes;
     public HashMap<String,List<Couple<Observation,Integer>>> myTreasureNodes;
+    public HashMap<String,List<Couple<Observation,Integer>>> myTreasureNodesNonAccessible;
     public String prochainTresor;
     public List<String> chemin;
     public List<String> cheminTresor;
@@ -59,6 +60,7 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 		this.closedNodes=new HashSet<String>();
 		//this.treasureNodes = new ArrayList<Couple<String,List<Couple<Observation,Integer>>>>();
 		this.myTreasureNodes = new HashMap<String,List<Couple<Observation,Integer>>>();
+		this.myTreasureNodesNonAccessible = new HashMap<String,List<Couple<Observation,Integer>>>();
 		this.prochainTresor = null;
 		this.chemin = new ArrayList<String>();
 		this.cheminTresor = new ArrayList<String>();

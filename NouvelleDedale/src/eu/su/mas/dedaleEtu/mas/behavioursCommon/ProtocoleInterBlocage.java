@@ -119,13 +119,14 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					}
 				}
 			}
-			this.myAgent.doWait(200); // laisser passer
-        }else {
-        	long s = System.currentTimeMillis();
-    		while (!((AbstractDedaleAgent)this.myAgent).getCurrentPosition().equals(monAgent.destination) && System.currentTimeMillis()-s <100){
-    			try{((AbstractDedaleAgent)this.myAgent).moveTo(monAgent.destination);}catch(Exception e){break;}   // TO Do: trouver l'erreur 
-    		}
+			this.myAgent.doWait(500); // laisser passer
         }
+//        else {
+//        	long s = System.currentTimeMillis();
+//    		while (!((AbstractDedaleAgent)this.myAgent).getCurrentPosition().equals(monAgent.destination) && System.currentTimeMillis()-s <100){
+//    			try{((AbstractDedaleAgent)this.myAgent).moveTo(monAgent.destination);}catch(Exception e){break;}   // TO Do: trouver l'erreur 
+//    		}
+//        }
 	}
 	public void integrerCarte(String carte) {
 		//System.out.println(this.myAgent.getLocalName()+ " est en train de  integerer une carte dans Protocole");
