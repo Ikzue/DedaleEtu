@@ -205,8 +205,10 @@ public class MoveCollector extends OneShotBehaviour{
     }
     private void moveToTreasure(String myPosition) {
 		String nextNode=getCheminTresor(myPosition).get(0);
-		if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode))
+		if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode)) {
 			monAgent.cheminTresor.clear();
+	      //  if (testInterBlocage(nextNode,myPosition)) next=8;
+		}
 		else 
 			monAgent.cheminTresor.remove(nextNode);
     }

@@ -117,20 +117,19 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
     	return nameAgents;
     }
     public int genererPriorite() {
-    	if (compteur == 0) {
-			if(this.getLocalName().contains("Collect")) {
-				this.priorite = 500;
-			    Random n = new Random();
-			    this.priorite += n.nextInt(1000);
-			    return this.priorite;
-			};
-			if(this.getLocalName().contains("Tank")) {
-				this.priorite = this.priorite == 0? 10000:0;
-			    return this.priorite;
-			};
-    	}else {
-    		compteur -= 1;
-    	}
+        if ((compteur%10) == 0) {
+            compteur = 1;
+            if(this.getType().contains("Collect")) {
+                this.priorite = 500;
+                Random n = new Random();
+                this.priorite += n.nextInt(1000);
+            }
+            if(this.getType().contains("Tank")) {
+                this.priorite = this.priorite == 0? 10000:0;
+            }
+        }else {
+            compteur += 1;
+        }
         return this.priorite;
     }
 	public abstract String getType();
