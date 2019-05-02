@@ -55,30 +55,22 @@ public class MoveCollector extends OneShotBehaviour{
 				System.out.println(this.myAgent.getLocalName()+"*****************Exploration successufully done.****************************************************");
 	            if (!monAgent.myTreasureNodes.isEmpty()) {
 	            	if(monAgent.prochainTresor == null) {
-	            		monAgent.prochainTresor = monAgent.myTreasureNodes.keySet().iterator().next();
+	            		monAgent.prochainTresor = genererProchainTresor();
 	            	}
 	            	System.out.println("test1"+" prochainTresor:" + monAgent.prochainTresor);
 	            	List<Couple<Observation, Integer>>  listobs = monAgent.myTreasureNodes.get(monAgent.prochainTresor);
 	            	System.out.println("val: "+monAgent.myTreasureNodes.get(monAgent.prochainTresor));
 	            	if(myPosition.equals(monAgent.prochainTresor)) {
 	            		//System.out.println("*****************L AGENT RAMASSE****************************************************");
-		            	System.out.println("test1.1");
 	            		openTreasure(listobs);
-		            	System.out.println("test1.2");
 	            		((AbstractDedaleAgent)this.myAgent).pick();
-		            	System.out.println("test1.3");
 	            		majTresor(monAgent.prochainTresor);
-		            	System.out.println("test1.4");
 	            		monAgent.prochainTresor = null;
-		            	System.out.println("test2");
 	            	}
 	            	else {
-		            	System.out.println("test2.9");
 	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
-		            	nextNode=getCheminTresor(myPosition).get(0);
-		            	System.out.println("test2.99");		            	
+		            	nextNode=getCheminTresor(myPosition).get(0);            	
 			            moveToTreasure(myPosition);
-		            	System.out.println("test3");
 	            	}
 				}
             	System.out.println("test4");
@@ -128,8 +120,7 @@ public class MoveCollector extends OneShotBehaviour{
 		listobs = pos.getRight();
 		String type;
 			for (Couple<Observation, Integer> obs : listobs ) {
-				type = obs.getLeft().getName();
-				if(type.contains("Gold")||type.contains("Diamond")) {
+				if(obs.getLeft() == monAgent.getMyTreasureType()) {
 					monAgent.myTreasureNodes.put(pos.getLeft(), pos.getRight());
 					return;
 				}
@@ -138,9 +129,19 @@ public class MoveCollector extends OneShotBehaviour{
 	private void majTresor(String prochainTresor) {
 		Couple<String, List<Couple<Observation, Integer>>> pos = ((AbstractDedaleAgent)this.myAgent).observe().get(0);
 		assert prochainTresor.equals(pos.getLeft()): "prochain tresor != pos.get";
-		monAgent.myTreasureNodes.remove(prochainTresor);
-		ajoutNoeudSiTresor2(pos);
-		
+		Boolean vide = true;
+        for (Couple<Observation,Integer> description: pos.getRight())
+        	if (description.getLeft() == ((AbstractDedaleAgent)this.myAgent).getMyTreasureType())
+        		vide = false;
+        if (vide) {
+        	monAgent.myTreasureNodes.remove(prochainTresor);
+        	monAgent.prochainTresor = null;
+        	System.out.println("vide vide vide vide vide********************************");
+        }else {
+        	System.out.println("nonn non vide non non vide********************************");
+        }
+//		monAgent.myTreasureNodes.remove(prochainTresor);
+//		ajoutNoeudSiTresor2(pos);
 	}
     //fin de l'action
 	public int onEnd() {
@@ -233,5 +234,19 @@ public class MoveCollector extends OneShotBehaviour{
 		monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor);
 		monAgent.destination = monAgent.prochainTresor;
 		return monAgent.cheminTresor;
+	}
+	private String genererProchainTresor() {
+		System.out.println("******************************* generer prochain Tresor**************************");
+		String prochainTresor = null;
+		int max = -1;
+		for (String key:monAgent.myTreasureNodes.keySet()) {
+			List<Couple<Observation,Integer>> obs = monAgent.myTreasureNodes.get(key);
+			for (Couple<Observation,Integer> ob: obs)
+				if (ob.getLeft() == monAgent.getMyTreasureType()&& ob.getRight()>max) { //To do:  ajouter les autres conditions
+					max = ob.getRight();
+					prochainTresor = key;
+				}
+		}
+		return prochainTresor;
 	}
 }
