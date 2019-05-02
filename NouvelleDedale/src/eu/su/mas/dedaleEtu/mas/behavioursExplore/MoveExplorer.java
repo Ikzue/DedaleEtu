@@ -69,7 +69,6 @@ public class MoveExplorer extends OneShotBehaviour{
                 		}*/
                 	}else {
             			remove_current_node_from_open_list_and_add_to_closedNodes(myPosition);
-            			monAgent.nbProtocolePriorite = 0;
                 	}
                 }else {
                 	/*
@@ -133,9 +132,13 @@ public class MoveExplorer extends OneShotBehaviour{
 		if (nextNode==null){
 			//no directly accessible openNode
 			//chose one, compute the path and take the first step.
-			nextNode=monAgent.myMap.getShortestPath(myPosition, openNodes.get(0)).get(0);
-		}
-		((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+			nextNode=getChemin(myPosition).get(0);
+			if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode))
+				monAgent.chemin.clear();
+			else 
+				monAgent.chemin.remove(nextNode);
+		}else
+			((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
     }
     
     private Boolean testMovementSucces(String newPosition,String oldPosition) {
@@ -151,5 +154,10 @@ public class MoveExplorer extends OneShotBehaviour{
 			moveSucces = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
 		}	
     return moveSucces?false:true;
+	}
+	private List<String> getChemin(String myPosition){
+		if (monAgent.chemin == null) 
+			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0)); 
+		return monAgent.chemin;
 	}
 }

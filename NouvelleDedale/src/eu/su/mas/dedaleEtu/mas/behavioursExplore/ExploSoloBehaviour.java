@@ -1,4 +1,4 @@
-package eu.su.mas.dedaleEtu.mas.behaviours;
+package eu.su.mas.dedaleEtu.mas.behavioursExplore;
 
 import java.io.IOException;
 import java.util.ArrayList;

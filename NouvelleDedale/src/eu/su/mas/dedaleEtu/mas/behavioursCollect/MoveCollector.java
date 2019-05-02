@@ -69,7 +69,7 @@ public class MoveCollector extends OneShotBehaviour{
 	            		nextNode = "2";
 	            	}
 	            	else {
-		            	nextNode=monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor).get(0);
+		            	nextNode=getCheminTresor(myPosition, monAgent.prochainTresor).get(0);
 		            	monAgent.tache = 1000; // type or
 						for (Couple<Observation, Integer> obs : listobs ) {
 							if (obs.getLeft().getName().contains("Diamond")){
@@ -181,9 +181,13 @@ public class MoveCollector extends OneShotBehaviour{
 		if (nextNode==null){
 			//no directly accessible openNode
 			//chose one, compute the path and take the first step.
-			nextNode=monAgent.myMap.getShortestPath(myPosition, openNodes.get(0)).get(0);
-		}
-		((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+			nextNode=getChemin(myPosition).get(0);
+			if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode))
+				monAgent.chemin.clear();
+			else 
+				monAgent.chemin.remove(nextNode);
+		}else
+			((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
     }
     
     private Boolean testMovementSucces(String newPosition,String oldPosition) {
@@ -199,5 +203,16 @@ public class MoveCollector extends OneShotBehaviour{
 			moveSucces = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
 		}	
     return moveSucces?false:true;
+	}
+	
+	private List<String> getChemin(String myPosition){
+		if (monAgent.chemin == null) 
+			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0)); 
+		return monAgent.chemin;
+	}
+	private List<String> getCheminTresor(String myPosition,String tresorPosition){
+		if (monAgent.chemin == null) 
+			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, tresorPosition); 
+		return monAgent.chemin;
 	}
 }

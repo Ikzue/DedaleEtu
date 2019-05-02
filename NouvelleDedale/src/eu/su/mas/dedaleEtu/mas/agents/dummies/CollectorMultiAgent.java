@@ -3,7 +3,7 @@ package eu.su.mas.dedaleEtu.mas.agents.dummies;
 import java.util.ArrayList;
 import java.util.List;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
-import eu.su.mas.dedaleEtu.mas.behaviours.CollectorMultiBehaviour;
+import eu.su.mas.dedaleEtu.mas.behavioursCollect.CollectorMultiBehaviour;
 import jade.core.behaviours.Behaviour;
 
 /**

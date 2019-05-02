@@ -2,8 +2,6 @@ package eu.su.mas.dedaleEtu.mas.behavioursCommon;
 
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
-import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
-import eu.su.mas.dedaleEtu.mas.agents.dummies.CollectorMultiAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -44,14 +42,12 @@ public class IntegrerCarte extends OneShotBehaviour{
 			i++;
 			System.out.println("test "+i);
 			
-			try {
-				// traitement de la chaine de caractere
-				String[] ss = monAgent.yourCarte.split("\\|");
+			String[] ss = monAgent.yourCarte.split("\\|");
+		    try {
 				String[] ncs = ss[0].split("\\*");
-				String[] nos = ss[1].split("\\*");
-				String[] aretes = ss[2].split("\\*");
-                //traitement de noeds fermes
+	            //traitement de noeds fermes
 				for (String nc:ncs) {
+					System.out.print("nc :"+nc);
 					if (nc.equals(""))
 						continue;
 					if (!monAgent.closedNodes.contains(nc)) {
@@ -60,9 +56,13 @@ public class IntegrerCarte extends OneShotBehaviour{
 						monAgent.myMap.addNode(nc, MapAttribute.closed);
 				    }    
 				}
-
+		    }catch(Exception e) {};
+				
+			try {
+				String[] nos = ss[1].split("\\*");
 				//traitement de noeuds ouverts
 				for (String no:nos) {
+					System.out.print("no :"+no);
 					if (no.equals(""))
 						continue;
 					if (monAgent.closedNodes.contains(no))
@@ -72,6 +72,10 @@ public class IntegrerCarte extends OneShotBehaviour{
 					monAgent.openNodes.add(no);
 					monAgent.myMap.addNode(no, MapAttribute.open);    
 				}
+			}catch(Exception e) {};
+			
+			try {
+				String[] aretes = ss[2].split("\\*");
 				//traitement des aretes
 				for (String e:aretes) {
 					if (e.equals(""))
@@ -79,7 +83,7 @@ public class IntegrerCarte extends OneShotBehaviour{
 					String[] n = e.split("-");
 					monAgent.myMap.addEdge(n[0], n[1]);
 				}
-			}catch(Exception e) {};
+			}catch(Exception e) {}
 			
 			System.out.println();
 			System.out.println("Apres:");

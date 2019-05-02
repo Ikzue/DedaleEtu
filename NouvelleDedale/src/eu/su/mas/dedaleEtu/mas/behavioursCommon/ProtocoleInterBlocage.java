@@ -8,6 +8,7 @@ import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.agents.dummies.BasicAgent;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -44,8 +45,8 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 		monNbAlea = Math.abs(monNbAlea);
 		//ajouter la priorite de l'agent
 		if (this.myAgent.getLocalName().contains("ollect"))            // collect sont prioritaire p/p explorateur  et Diamon > gold
-			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?10000:20000;
-		msg.setContent("InterBlocage:"+monNbAlea);
+			monNbAlea += (monAgent.getMyTreasureType() == Observation.GOLD)?300:600;
+		msg.setContent("InterBlocage:"+monNbAlea+":"+envoiCarte());
 		// 1.3) envoyer
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);
 		for (String receiver: receivers) {
@@ -70,10 +71,16 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
 				    msg.getSender().getLocalName()+" ,content= "+msg.getContent());
         	       	
-        	if (!msg.getContent().contains("InterBlocage"))
+        	String message = msg.getContent();
+        	if (message.contains("carte")) {
+        		System.out.println(monAgent.getLocalName()+ " integrer carte icicicici");
+        		String[] ss = message.split("=");
+			    integrerCarte(ss[1]);
+        		System.out.println(monAgent.getLocalName()+ " integrer carte dingdingding");			    
+        	}
+        	if (!message.contains("InterBlocage"))
         		continue;
-        	
-        	content = msg.getContent().split("\\:");
+        	content = message.split("\\:");
         	
         	if (content.length == 1)
         		continue;
@@ -109,6 +116,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					myNewPosition = ((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
 					if (!myPosition.equals(myNewPosition)){
 						System.out.println(this.myAgent.getLocalName()+ " move from "+ myPosition + " to "+myNewPosition);				
+						monAgent.chemin = null;
 						break;
 					}
 				}
@@ -120,6 +128,71 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
     			try{((AbstractDedaleAgent)this.myAgent).moveTo(monAgent.destination);}catch(Exception e){break;}   // TO Do: trouver l'erreur 
     		}
         }
+	}
+	public void integrerCarte(String carte) {
+		System.out.println(this.myAgent.getLocalName()+ " est en train de  integerer une carte dans Protocole");
+		
+		// traitement de la chaine de caractere
+
+			String[] ss = carte.split("\\|");
+		    try {
+				String[] ncs = ss[0].split("\\*");
+	            //traitement de noeds fermes
+				for (String nc:ncs) {
+					System.out.print("nc :"+nc);
+					if (nc.equals(""))
+						continue;
+					if (!monAgent.closedNodes.contains(nc)) {
+						monAgent.closedNodes.add(nc);
+						monAgent.openNodes.remove(nc);
+						monAgent.myMap.addNode(nc, MapAttribute.closed);
+				    }    
+				}
+		    }catch(Exception e) {};
+				
+			try {
+				String[] nos = ss[1].split("\\*");
+				//traitement de noeuds ouverts
+				for (String no:nos) {
+					System.out.print("no :"+no);
+					if (no.equals(""))
+						continue;
+					if (monAgent.closedNodes.contains(no))
+						continue;
+					if (monAgent.openNodes.contains(no))
+						continue;				
+					monAgent.openNodes.add(no);
+					monAgent.myMap.addNode(no, MapAttribute.open);    
+				}
+			}catch(Exception e) {};
+			
+			try {
+				String[] aretes = ss[2].split("\\*");
+				//traitement des aretes
+				for (String e:aretes) {
+					if (e.equals(""))
+						continue;
+					String[] n = e.split("-");
+					monAgent.myMap.addEdge(n[0], n[1]);
+				}
+			}catch(Exception e) {}
+			System.out.println(this.myAgent.getLocalName()+ " a integerer une carte dans Protocole");
+	}
+	public String envoiCarte() {
+		String myCarte = "";
+		try {
+			String nc = "";
+			for (String n:monAgent.closedNodes) {
+				nc = nc + "*" + n;
+			}
+			//2.2 encoder l'ensemble des noeuds ouverts
+			String no = "";
+			for (String n:monAgent.openNodes) {
+				no = no + "*" + n;
+			}
+			myCarte = "carte" + "=" + nc + "|" + no + "|" +monAgent.myMap.expo();
+		}catch(Exception ex) {};
+		return myCarte;
 	}
 }
 //endProtocoleInterBlocage

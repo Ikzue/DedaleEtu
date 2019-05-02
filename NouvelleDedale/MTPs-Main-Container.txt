@@ -1,1 +1,1 @@
-http://wei.home:7778/acc
+http://wei:7778/acc

@@ -6,8 +6,8 @@ import java.util.List;
 
 import eu.su.mas.dedale.mas.agent.behaviours.ReceiveTreasureTankerBehaviour;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
+import eu.su.mas.dedaleEtu.mas.behavioursTanker.TankerMultiBehaviour;
 import jade.core.behaviours.Behaviour;
-import eu.su.mas.dedaleEtu.mas.behaviours.TankerMultiBehaviour;
 
 
 public class TankerMultiAgent extends BasicAgent{
@@ -16,7 +16,6 @@ public class TankerMultiAgent extends BasicAgent{
 	 * 
 	 */
 	private static final long serialVersionUID = -1784844593772918359L;
-
 	protected void setup(){
 
 		

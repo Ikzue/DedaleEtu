@@ -1,4 +1,4 @@
-package eu.su.mas.dedaleEtu.mas.behaviours;
+package eu.su.mas.dedaleEtu.mas.behavioursExplore;
 
 import java.io.IOException;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
@@ -7,11 +7,8 @@ import eu.su.mas.dedaleEtu.mas.behavioursCommon.EnvoieCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ExploMultiSendMessageBehaviour;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.IntegrerCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocage;
-import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocagePriorite;
-import eu.su.mas.dedaleEtu.mas.behavioursCommon.InterBlocagePrioriteEtAlea;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.RecevoirMessage;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.Repondre;
-import eu.su.mas.dedaleEtu.mas.behavioursExplore.MoveExplorer;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.behaviours.FSMBehaviour;
 
@@ -46,8 +43,6 @@ public class ExploMultiBehaviour extends FSMBehaviour {
 		this.registerState(new EnvoieCarte(myagent),"envoieCarte");
 		this.registerState(new IntegrerCarte(myagent), "integrerCarte");
 		this.registerState(new ProtocoleInterBlocage(myagent), "protocoleInterBlocage");
-		this.registerState(new ProtocoleInterBlocagePriorite(myagent), "protocoleInterBlocagePriorite");
-//		this.registerState(new InterBlocagePrioriteEtAlea(myagent), "protocolePrioriteEtAlea");
 		//transitions
 		this.registerDefaultTransition("recevoirMessage","move");
 		this.registerDefaultTransition("move", "IsAnyoneThere?");
@@ -62,13 +57,8 @@ public class ExploMultiBehaviour extends FSMBehaviour {
 		this.registerDefaultTransition("integrerCarte","recevoirMessage");
 		
 		//TO DO: ajouter une variable dans BasicAgent pour savoir quand utiliser protocole avec priorite
-		//this.registerTransition("move", "protocolePrioriteEtAlea", 8);
-	//	this.registerDefaultTransition("protocolePrioriteEtAlea","recevoirMessage");
 		this.registerTransition("move", "protocoleInterBlocage", 8);
-		//this.registerTransition("move", "protocoleInterBlocagePriorite", 9);
-		this.registerDefaultTransition("protocoleInterBlocage", "recevoirMessage");
-		this.registerDefaultTransition("protocoleInterBlocagePriorite", "recevoirMessage");
-		
+		this.registerDefaultTransition("protocoleInterBlocage", "recevoirMessage");		
 	}
 
 	@Override

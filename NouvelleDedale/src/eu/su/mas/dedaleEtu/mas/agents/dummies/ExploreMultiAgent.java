@@ -5,7 +5,7 @@ import java.util.List;
 
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
-import eu.su.mas.dedaleEtu.mas.behaviours.ExploMultiBehaviour;
+import eu.su.mas.dedaleEtu.mas.behavioursExplore.ExploMultiBehaviour;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.behaviours.Behaviour;
 
