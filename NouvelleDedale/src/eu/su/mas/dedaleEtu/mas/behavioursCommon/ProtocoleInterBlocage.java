@@ -20,17 +20,17 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 	private BasicAgent monAgent;
 	public ProtocoleInterBlocage(final AbstractDedaleAgent myagent) {
 		super(myagent);
-	    monAgent = (BasicAgent)myagent;;
+	    monAgent = (BasicAgent)myagent;
 	}
 
 	@Override
 	public void action() {
 		System.out.println();
-		System.out.println("*****************Resolution Interblocage "+this.myAgent.getLocalName()+"****************************************************");
+		System.out.println(this.myAgent.getLocalName()+ " execute le comportement ProtocoleInterBlocage.");
 		System.out.println();
 			
 		// 1) envoie de message: "InterBlocage"+n where n est un nombre aleatoire
-		String[] receivers = {"Collect1","Collect2","Tanker1","Explo1","Explo2"}; //list of localname
+		List<String> receivers = monAgent.getNameAgents();
 		// 1.1) Create the message
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setSender(this.myAgent.getAID());
@@ -52,7 +52,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 		for (String receiver: receivers) {
 			if (receiver.equals(this.getAgent().getLocalName()))   //afficher tous les messages envoyes
 				continue;                   
-			System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
+			//System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
 		}
 
 		// 2) attendre 100ms et retenu le max resu
@@ -68,15 +68,15 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         		continue;
         	}
         	
-			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
+			/*System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
 				    msg.getSender().getLocalName()+" ,content= "+msg.getContent());
-        	       	
+        	       	*/
         	String message = msg.getContent();
         	if (message.contains("carte")) {
-        		System.out.println(monAgent.getLocalName()+ " integrer carte icicicici");
+        		//System.out.println(monAgent.getLocalName()+ " integrer carte icicicici");
         		String[] ss = message.split("=");
 			    integrerCarte(ss[1]);
-        		System.out.println(monAgent.getLocalName()+ " integrer carte dingdingding");			    
+        		//System.out.println(monAgent.getLocalName()+ " integrer carte dingdingding");			    
         	}
         	if (!message.contains("InterBlocage"))
         		continue;
@@ -95,7 +95,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         			for (String receiver: receivers) {
         				if (receiver.equals(this.getAgent().getLocalName()) || receiver.equals(msg.getSender().getLocalName()))   //afficher tous les messages envoyes
         					continue;                   
-        				System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
+        				//System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
         			}
         		}
         	}catch(Exception e) {};
@@ -115,7 +115,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					((AbstractDedaleAgent)this.myAgent).moveTo(iter.next().getLeft());
 					myNewPosition = ((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
 					if (!myPosition.equals(myNewPosition)){
-						System.out.println(this.myAgent.getLocalName()+ " move from "+ myPosition + " to "+myNewPosition);				
+						//System.out.println(this.myAgent.getLocalName()+ " move from "+ myPosition + " to "+myNewPosition);				
 						monAgent.chemin = null;
 						break;
 					}
@@ -130,7 +130,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         }
 	}
 	public void integrerCarte(String carte) {
-		System.out.println(this.myAgent.getLocalName()+ " est en train de  integerer une carte dans Protocole");
+		//System.out.println(this.myAgent.getLocalName()+ " est en train de  integerer une carte dans Protocole");
 		
 		// traitement de la chaine de caractere
 
@@ -139,7 +139,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 				String[] ncs = ss[0].split("\\*");
 	            //traitement de noeds fermes
 				for (String nc:ncs) {
-					System.out.print("nc :"+nc);
+					//System.out.print("nc :"+nc);
 					if (nc.equals(""))
 						continue;
 					if (!monAgent.closedNodes.contains(nc)) {
@@ -154,7 +154,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 				String[] nos = ss[1].split("\\*");
 				//traitement de noeuds ouverts
 				for (String no:nos) {
-					System.out.print("no :"+no);
+					//System.out.print("no :"+no);
 					if (no.equals(""))
 						continue;
 					if (monAgent.closedNodes.contains(no))
@@ -176,7 +176,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					monAgent.myMap.addEdge(n[0], n[1]);
 				}
 			}catch(Exception e) {}
-			System.out.println(this.myAgent.getLocalName()+ " a integerer une carte dans Protocole");
+			//System.out.println(this.myAgent.getLocalName()+ " a integerer une carte dans Protocole");
 	}
 	public String envoiCarte() {
 		String myCarte = "";

@@ -19,6 +19,7 @@ public class EnvoieCarte extends OneShotBehaviour{
 		monAgent = (BasicAgent) myagent;
 	}
 	public void action() {
+		System.out.println(this.myAgent.getLocalName()+ " execute le comportement EnvoiCarte.");
 		//1°Create the message
 		final ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setSender(this.myAgent.getAID());
@@ -36,10 +37,13 @@ public class EnvoieCarte extends OneShotBehaviour{
 			for (String n:monAgent.openNodes) {
 				no = no + "*" + n;
 			}
-			myCarte = "carte" + "=" + nc + "|" + no + "|" +monAgent.myMap.expo();
+			myCarte = "carte" + "=" + nc + "|" + no + "|" + monAgent.myMap.expo();
+			if (!(monAgent.tankerPosition == null)){
+				myCarte = myCarte  + "|" + monAgent.tankerPosition;
+			}
 		}catch(Exception ex) {};
 		msg.setContent(myCarte);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
-		System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
+		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
 	}
 }

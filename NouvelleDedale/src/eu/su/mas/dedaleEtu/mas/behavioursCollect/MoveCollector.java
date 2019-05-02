@@ -15,7 +15,7 @@ import jade.core.behaviours.OneShotBehaviour;
 
 public class MoveCollector extends OneShotBehaviour{
 	private static final long serialVersionUID = 2019355514537795289L;
-	private int next = 0;
+	private int next;
 	private BasicAgent monAgent;
 	public MoveCollector(final AbstractDedaleAgent myagent) {
 	    this.myAgent = myagent;
@@ -23,8 +23,8 @@ public class MoveCollector extends OneShotBehaviour{
 	}
 	//dubut de l'action
     public void action() {
+    	next = 0;
     	System.out.println(this.myAgent.getLocalName()+ " execute le comportement Move.");
-    	
 		if(monAgent.myMap==null)
 			monAgent.myMap= new MapRepresentation();
 		//0) Retrieve the current position
@@ -47,12 +47,10 @@ public class MoveCollector extends OneShotBehaviour{
 			//2.5)Add Treasures
 			majTreasureNodes(lobs);
 
-			System.out.println("Noeuds TreasureNodes:");
-			System.out.println(monAgent.treasureNodes);
-			System.out.println("Noeuds myTreasureNodes");
+			System.out.println("Noeud myTreasureNode");
 			System.out.println(monAgent.myTreasureNodes);
 			//3) while openNodes is not empty, continues.
-			if (monAgent.openNodes.size()==0){
+			if (monAgent.openNodes.isEmpty()){
 				System.out.println();
 				System.out.println("*****************Exploration successufully done.****************************************************");
 	            if (!monAgent.myTreasureNodes.isEmpty()) {
@@ -61,15 +59,16 @@ public class MoveCollector extends OneShotBehaviour{
 	            	}
 	            	List<Couple<Observation, Integer>>  listobs = monAgent.myTreasureNodes.get(monAgent.prochainTresor);
 	            	if(myPosition.equals(monAgent.prochainTresor)) {
-	            		System.out.println("L'agent ramasse:");
+	            		//System.out.println("*****************L AGENT RAMASSE****************************************************");
 	            		openTreasure(listobs);
 	            		((AbstractDedaleAgent)this.myAgent).pick();
 	            		majTresor(monAgent.prochainTresor);
 	            		monAgent.prochainTresor = null;
-	            		nextNode = "2";
 	            	}
 	            	else {
-		            	nextNode=getCheminTresor(myPosition, monAgent.prochainTresor).get(0);
+	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
+		            	nextNode=getCheminTresor(myPosition).get(0);
+			            moveToTreasure(myPosition);
 		            	monAgent.tache = 1000; // type or
 						for (Couple<Observation, Integer> obs : listobs ) {
 							if (obs.getLeft().getName().contains("Diamond")){
@@ -79,8 +78,12 @@ public class MoveCollector extends OneShotBehaviour{
 						}
 	            	}
 				}
-	            System.out.println("Noeud Tresor " + nextNode);
-				((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+        		int spaceBackpack = ((AbstractDedaleAgent)this.myAgent).getBackPackFreeSpace();
+        		int capacite = ((CollectorMultiAgent)this.myAgent).getBackpackCapacity();
+        		if(spaceBackpack==0||(spaceBackpack!=capacite && monAgent.myTreasureNodes.isEmpty())) {
+        			next = 9;
+        		}
+	            
 			}else{
 				
 				
@@ -179,6 +182,9 @@ public class MoveCollector extends OneShotBehaviour{
 	
     private void moveToDirectlyAccessibleOpenNodeOrChosenNode(String nextNode,String myPosition,List<String> openNodes) {
 		if (nextNode==null){
+			System.out.println("IF");
+			System.out.println("CHEMIN" + monAgent.chemin);
+			System.out.println("MY POSITION" + myPosition);
 			//no directly accessible openNode
 			//chose one, compute the path and take the first step.
 			nextNode=getChemin(myPosition).get(0);
@@ -186,8 +192,18 @@ public class MoveCollector extends OneShotBehaviour{
 				monAgent.chemin.clear();
 			else 
 				monAgent.chemin.remove(nextNode);
-		}else
+		}else {
+			System.out.println("ELSE");
+			monAgent.chemin.clear();
 			((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
+		}
+    }
+    private void moveToTreasure(String myPosition) {
+		String nextNode=getCheminTresor(myPosition).get(0);
+		if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode))
+			monAgent.cheminTresor.clear();
+		else 
+			monAgent.cheminTresor.remove(nextNode);
     }
     
     private Boolean testMovementSucces(String newPosition,String oldPosition) {
@@ -206,13 +222,17 @@ public class MoveCollector extends OneShotBehaviour{
 	}
 	
 	private List<String> getChemin(String myPosition){
-		if (monAgent.chemin == null) 
-			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0)); 
+		if (monAgent.chemin.isEmpty())
+			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.openNodes.get(0));
+		System.out.println(monAgent.chemin);
 		return monAgent.chemin;
 	}
-	private List<String> getCheminTresor(String myPosition,String tresorPosition){
-		if (monAgent.chemin == null) 
-			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, tresorPosition); 
-		return monAgent.chemin;
+	private List<String> getCheminTresor(String myPosition){
+		if (monAgent.cheminTresor.isEmpty())
+			monAgent.cheminTresor = monAgent.myMap.getShortestPath(myPosition, monAgent.prochainTresor); 
+		System.out.println("My position" + myPosition);
+		System.out.println("Prochain tresor" + monAgent.prochainTresor);
+		System.out.println(monAgent.cheminTresor);
+		return monAgent.cheminTresor;
 	}
 }

@@ -46,4 +46,8 @@ public class TankerMultiAgent extends BasicAgent{
 	protected void takeDown(){
 
 	}
+	@Override
+	public String getType() {
+		return "Tanker";
+	}
 }

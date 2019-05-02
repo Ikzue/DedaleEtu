@@ -25,8 +25,8 @@ public class TankerRecevoirMessage extends OneShotBehaviour{
 	public void action() {
         next = 0;
 		System.out.println(monAgent.getLocalName()+"execute Tanker RecevoirMessage");
-    	System.out.println(monAgent.getLocalName()+" openNodes"+monAgent.openNodes);
-    	System.out.println(monAgent.getLocalName()+" closedNodes"+monAgent.closedNodes);
+    	//System.out.println(monAgent.getLocalName()+" openNodes"+monAgent.openNodes);
+    	//System.out.println(monAgent.getLocalName()+" closedNodes"+monAgent.closedNodes);
 		this.myAgent.doWait(300);
 		//1) receive the message
 		MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
@@ -42,10 +42,11 @@ public class TankerRecevoirMessage extends OneShotBehaviour{
 				       }
 			}
 			monAgent.receiver = msg.getSender().getLocalName();
+			/*
 			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
-					    msg.getSender().getLocalName()+" ,content= "+msg.getContent()+", next = "+next);
+					    msg.getSender().getLocalName()+" ,content= "+msg.getContent()+", next = "+next);*/
 		}
-		System.out.println(monAgent.getLocalName()+"next ="+next);
+		//System.out.println(monAgent.getLocalName()+"next ="+next);
 	}
 	public int onEnd() {
 		try {

@@ -18,17 +18,18 @@ public class IntegrerCarte extends OneShotBehaviour{
 	    monAgent = (BasicAgent) myagent;
 	}
 	public void action() {
+		System.out.println(this.myAgent.getLocalName()+ " execute le comportement IntegrerCarte.");
 		int i = 0;
 		i++;
 		System.out.println("test "+i);
 		if (!monAgent.yourCarte.equals("")) {
-			System.out.println(this.myAgent.getLocalName()+" integrer une carte ");
-			System.out.println("Carte avant:");
-			System.out.print("closedNodes :");
+			//System.out.println(this.myAgent.getLocalName()+" integrer une carte ");
+			//System.out.println("Carte avant:");
+			//System.out.print("closedNodes :");
 			
 			i++;
-			System.out.println("test "+i);
-			
+			//System.out.println("test "+i);
+			/*
 			for (String nc:monAgent.closedNodes) {
 				System.out.print(nc);
 			}
@@ -38,16 +39,16 @@ public class IntegrerCarte extends OneShotBehaviour{
 				System.out.print(no);
 			}
 			System.out.println();
-			
+			*/
 			i++;
-			System.out.println("test "+i);
+			//System.out.println("test "+i);
 			
 			String[] ss = monAgent.yourCarte.split("\\|");
 		    try {
 				String[] ncs = ss[0].split("\\*");
 	            //traitement de noeds fermes
 				for (String nc:ncs) {
-					System.out.print("nc :"+nc);
+					//System.out.print("nc :"+nc);
 					if (nc.equals(""))
 						continue;
 					if (!monAgent.closedNodes.contains(nc)) {
@@ -85,6 +86,11 @@ public class IntegrerCarte extends OneShotBehaviour{
 				}
 			}catch(Exception e) {}
 			
+			if (monAgent.tankerPosition == null)
+				try {
+					monAgent.tankerPosition = ss[3];
+				}catch(Exception e) {};
+			/*
 			System.out.println();
 			System.out.println("Apres:");
 			System.out.print("closedNodes:");
@@ -97,7 +103,9 @@ public class IntegrerCarte extends OneShotBehaviour{
 				System.out.print(no+" ");
 			}
 			System.out.println();
+			*/
 		}
-		System.out.println("test end");
+		//System.out.println("test end");
+		
 	}
 }

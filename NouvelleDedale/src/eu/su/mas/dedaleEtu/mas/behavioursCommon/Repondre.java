@@ -19,6 +19,7 @@ public class Repondre extends OneShotBehaviour{
 		monAgent = (BasicAgent) myagent;
 	}
 	public void action() {
+		System.out.println(this.myAgent.getLocalName()+ " execute le comportement Repondre.");
 		//1°Create the message
 		final ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setSender(this.myAgent.getAID());
@@ -26,6 +27,6 @@ public class Repondre extends OneShotBehaviour{
 		//2° compute the random value		
 		msg.setContent("I'm here!");
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
-		System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
+		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
 	}
 }

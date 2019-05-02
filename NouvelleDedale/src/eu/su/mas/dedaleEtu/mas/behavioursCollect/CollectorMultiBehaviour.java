@@ -1,12 +1,12 @@
 package eu.su.mas.dedaleEtu.mas.behavioursCollect;
 
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
+import eu.su.mas.dedaleEtu.mas.agents.dummies.CollectorMultiAgent;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.DemandeCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.EnvoieCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ExploMultiSendMessageBehaviour;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.IntegrerCarte;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocage;
-import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocagePriorite;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.RecevoirMessage;
 import eu.su.mas.dedaleEtu.mas.behavioursCommon.Repondre;
 import jade.core.behaviours.FSMBehaviour;
@@ -32,16 +32,16 @@ public class CollectorMultiBehaviour extends FSMBehaviour {
 	
 	public CollectorMultiBehaviour(final AbstractDedaleAgent myagent) {
 		super(myagent);
-
 		//states
 		this.registerFirstState(new RecevoirMessage(myagent),"recevoirMessage");
 		this.registerState(new ExploMultiSendMessageBehaviour(myagent), "IsAnyoneThere?");
 		this.registerState(new MoveCollector(myagent), "move");
-		this.registerState(new Repondre(myagent), "sendI'mHere!");		System.out.println();
+		this.registerState(new Repondre(myagent), "sendI'mHere!");
 		this.registerState(new DemandeCarte(myagent), "demandeCarte");
 		this.registerState(new EnvoieCarte(myagent),"envoieCarte");
 		this.registerState(new IntegrerCarte(myagent), "integrerCarte");
 		this.registerState(new ProtocoleInterBlocage(myagent), "protocoleInterBlocage");
+		this.registerState(new Depot(myagent), "depot");
 		//transitions
 		this.registerDefaultTransition("recevoirMessage","move");
 		this.registerDefaultTransition("move", "IsAnyoneThere?");
@@ -54,9 +54,10 @@ public class CollectorMultiBehaviour extends FSMBehaviour {
 		this.registerDefaultTransition("envoieCarte", "recevoirMessage");
 		this.registerTransition("recevoirMessage","integrerCarte", 7);  //apre avoir recu la carte , l'integrer
 		this.registerDefaultTransition("integrerCarte","recevoirMessage");
-		this.registerTransition("move", "protocoleInterBlocagePriorite", 8);
-		this.registerTransition("protocoleInterBlocage", "recevoirMessage",0);
-		this.registerTransition("protocoleInterBlocage", "move",1);
+		this.registerTransition("move", "protocoleInterBlocage", 8);
+		this.registerTransition("move", "depot", 9);
+		this.registerDefaultTransition("protocoleInterBlocage", "IsAnyoneThere?");
+		this.registerDefaultTransition("depot","move");
 
 
 	}

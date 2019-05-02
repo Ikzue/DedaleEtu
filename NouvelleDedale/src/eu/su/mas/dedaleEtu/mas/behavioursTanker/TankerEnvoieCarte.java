@@ -27,7 +27,7 @@ public class TankerEnvoieCarte extends OneShotBehaviour {
 		msg.addReceiver(new AID(monAgent.receiver, AID.ISLOCALNAME));  
 		msg.setContent("Tanker:" + monAgent.tankerPosition);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
-		System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
+		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
 		//1°Create the message
 		//2° encoder la connaissance
 	    //2.1 encoder l'ensemble des noeuds fermes
@@ -43,13 +43,15 @@ public class TankerEnvoieCarte extends OneShotBehaviour {
 				no = no + "*" + n;
 			}
 			myCarte = "carte" + "=" + nc + "|" + no + "|" +monAgent.myMap.expo();
+			myCarte = myCarte  + "|" + monAgent.tankerPosition;
+			
 		}catch(Exception ex) {};
 		msg.setContent(myCarte);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
-		System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
+		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());
         msg.setContent("InterBlocage:10000:"+myCarte);
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);                   
-		System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());		
+		//System.out.println(this.myAgent.getLocalName()+" sent to "+monAgent.receiver+" ,content= "+msg.getContent());		
 		msg.setContent("Send me your map.");
 		((AbstractDedaleAgent)this.myAgent).sendMessage(msg);  
 	}

@@ -21,6 +21,7 @@ public class RecevoirMessage extends OneShotBehaviour{
 		monAgent = (BasicAgent)myagent;
 	}
 	public void action() {
+		System.out.println(this.myAgent.getLocalName()+ " execute le comportement RecevoirMessage.");
 		//1) receive the message
 		MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
 		ACLMessage msg = this.myAgent.receive(msgTemplate);
@@ -43,9 +44,10 @@ public class RecevoirMessage extends OneShotBehaviour{
 				    	  next=1;
 				       }
 			}
-			monAgent.receiver = msg.getSender().getLocalName();
+			monAgent.receiver = msg.getSender().getLocalName();/*
 			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
 					    msg.getSender().getLocalName()+" ,content= "+msg.getContent()+", next = "+next);
+					    */
 		}else {next = 1;};
 	}
 	public int onEnd() {

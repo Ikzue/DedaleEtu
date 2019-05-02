@@ -10,6 +10,10 @@ import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public abstract class BasicAgent extends AbstractDedaleAgent{
 
@@ -25,11 +29,12 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 	 * Nodes known but not yet visited
 	 */
     public List<String> openNodes;
-    public List<Couple<String,List<Couple<Observation,Integer>>>> treasureNodes;
     public HashMap<String,List<Couple<Observation,Integer>>> myTreasureNodes;
     public String prochainTresor;
     public List<String> chemin;
+    public List<String> cheminTresor;
     public String tankerPosition;
+    public int nbMessageEnvoye;
 	/**
 	 * Visited nodes
 	 */
@@ -46,14 +51,69 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
 	 */
     protected void setup() {
 		super.setup();
+		register();
 		this.openNodes=new ArrayList<String>();
+		this.nbMessageEnvoye = 0;
 		this.closedNodes=new HashSet<String>();
-		this.treasureNodes = new ArrayList<Couple<String,List<Couple<Observation,Integer>>>>();
+		//this.treasureNodes = new ArrayList<Couple<String,List<Couple<Observation,Integer>>>>();
 		this.myTreasureNodes = new HashMap<String,List<Couple<Observation,Integer>>>();
 		this.prochainTresor = null;
+		this.chemin = new ArrayList<String>();
+		this.cheminTresor = new ArrayList<String>();
 		if (getLocalName().contains("Explore"))
 			this.tache = 10000;
 		else if(getLocalName().contains("Collect"))
 			this.tache = 20000;
     }
+    
+    private void register() {
+    	DFAgentDescription dfd = new DFAgentDescription();
+    	dfd.setName(getAID());
+    	ServiceDescription sd = new ServiceDescription();
+    	sd.setType(getType());
+    	sd.setName(getLocalName());
+    	dfd.addServices(sd);
+    	try {
+    		DFService.register(this, dfd);
+    	}catch(FIPAException fe) {
+    		fe.printStackTrace();
+    	}
+    }
+    public List<String> getNameAgents(){
+    	String[] listTypes = {"Collecteur","Explorateur","Tanker"};
+    	List<String> nameAgents = new ArrayList<String>();
+    	DFAgentDescription dfd = new DFAgentDescription();
+    	ServiceDescription sd = new ServiceDescription();
+    	for(String type:listTypes) {
+    		sd.setType(type);
+    		dfd.addServices(sd);
+    		try {
+				DFAgentDescription[] result = DFService.search(this, dfd);
+				for(DFAgentDescription r:result) {
+					nameAgents.add(r.getName().getLocalName());
+				}
+			} catch (FIPAException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return nameAgents;
+    	
+    }
+    public List<String> getNameAgents(String type){
+    	List<String> nameAgents = new ArrayList<String>();
+    	DFAgentDescription dfd = new DFAgentDescription();
+    	ServiceDescription sd = new ServiceDescription();
+    	sd.setType(type);
+    	dfd.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			for(DFAgentDescription r:result) {
+				nameAgents.add(r.getName().getLocalName());
+			}
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+    	return nameAgents;
+    }
+	public abstract String getType();
 }

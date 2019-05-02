@@ -8,6 +8,7 @@ import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.behavioursExplore.ExploMultiBehaviour;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
 
 /**
  * ExploreSolo agent. 
@@ -49,7 +50,6 @@ public class ExploreMultiAgent extends BasicAgent {
 		
 		lb.add(fsm);
 		
-		
 		/***
 		 * MANDATORY TO ALLOW YOUR AGENT TO BE DEPLOYED CORRECTLY
 		 */
@@ -60,8 +60,9 @@ public class ExploreMultiAgent extends BasicAgent {
 		System.out.println("the  agent "+this.getLocalName()+ " is started");
 	}
 	
-	
-	
-	
+	@Override
+	public String getType() {
+		return "Explorateur";
+	}
 	
 }
