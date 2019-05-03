@@ -18,7 +18,7 @@ import jade.core.behaviours.Behaviour;
 
 public class CollectorMultiAgent extends BasicAgent {
 
-	private static final long serialVersionUID = -6431752665590433727L;
+	private static final long serialVersionUID = -6431752333590433727L;
 	public int backpackMaxCapacity;
 	/**
 	 * This method is automatically called when "agent".start() is executed.

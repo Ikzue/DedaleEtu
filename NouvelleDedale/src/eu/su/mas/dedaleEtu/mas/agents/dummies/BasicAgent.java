@@ -18,7 +18,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public abstract class BasicAgent extends AbstractDedaleAgent{
 
-	private static final long serialVersionUID = -6431752665590433727L;
+	private static final long serialVersionUID = -6431752444590433727L;
 	
 	/**
 	 * Current knowledge of the agent regarding the environment
@@ -124,8 +124,13 @@ public abstract class BasicAgent extends AbstractDedaleAgent{
                 Random n = new Random();
                 this.priorite += n.nextInt(1000);
             }
+            if(this.getType().contains("Explore")) {
+                Random n = new Random();
+                this.priorite += n.nextInt(1000);
+            }
             if(this.getType().contains("Tank")) {
-                this.priorite = this.priorite == 0? 10000:0;
+                this.priorite = 0;
+        		System.out.println(getLocalName()+" priorite: "+priorite+"*****************************************");
             }
         }else {
             compteur += 1;

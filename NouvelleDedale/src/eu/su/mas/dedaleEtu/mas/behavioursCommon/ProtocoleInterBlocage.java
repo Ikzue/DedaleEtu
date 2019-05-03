@@ -39,6 +39,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 				continue;                   //pas de message pour lui meme
 			msg.addReceiver(new AID(receiver, AID.ISLOCALNAME));  
 		}
+		
 		// 1.2) set message content	
 		int monNbAlea = monAgent.genererPriorite();
 		//ajouter la priorite de l'agent
@@ -50,11 +51,11 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 		for (String receiver: receivers) {
 			if (receiver.equals(this.getAgent().getLocalName()))   //afficher tous les messages envoyes
 				continue;                   
-			//System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
+			System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
 		}
 
-		// 2) attendre 100ms et retenu le max resu
-		int tempAttente = 100;
+		// 2) attendre 200ms et retenu le max resu
+		int tempAttente = 200;
 		long start = System.currentTimeMillis(); 
 		int max = monNbAlea;
 		int tonNbAlea;
@@ -64,11 +65,10 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         	if (msg == null) {
         		block(50);
         		continue;
-        	}
-        	
-			/*System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
+        	}       	
+			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+
 				    msg.getSender().getLocalName()+" ,content= "+msg.getContent());
-        	       	*/
+        	       	
         	String message = msg.getContent();
         	if (message.contains("carte")) {
         		//System.out.println(monAgent.getLocalName()+ " integrer carte icicicici");
@@ -80,9 +80,9 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         		continue;
         	content = message.split("\\:");
         	
-        	if (content.length == 1)
-        		continue;
-        	try {
+        	assert(content.length >1);
+        	
+       // 	try {
         		tonNbAlea = Integer.parseInt(content[1]);
         		if (tonNbAlea>max) {
         			max = tonNbAlea;
@@ -90,15 +90,14 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
         			msg.setContent("InterBlocage:"+max);
         			// 3.2) envoyer
         			((AbstractDedaleAgent)this.myAgent).sendMessage(msg);
-        			for (String receiver: receivers) {
-        				if (receiver.equals(this.getAgent().getLocalName()) || receiver.equals(msg.getSender().getLocalName()))   //afficher tous les messages envoyes
-        					continue;                   
-        				//System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
+        			for (String receiver: receivers) {                 
+        				System.out.println(this.myAgent.getLocalName()+" sent to "+receiver+" ,content= "+msg.getContent());
         			}
         		}
-        	}catch(Exception e) {};
-        	
+        //	}catch(Exception e) {}; 	
         }while(System.currentTimeMillis()- start < tempAttente);
+        System.out.println(this.myAgent.getLocalName()+ " execute le comportement ProtocoleInterBlocage.   test 3 max:"+max); 
+        
 		// 5) si mon nombre n'est pas le max, alors je changer ma position aleatoirement
         if (max > monNbAlea) {
 			System.out.println(this.myAgent.getLocalName()+" perd");
@@ -118,6 +117,12 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 						break;
 					}
 				}
+//				int compteur = lobs.size()*10;
+//				String nextNode = lobs.get(new Random().nextInt(lobs.size())).getLeft();
+//				while (!monAgent.moveTo(nextNode) && compteur > 0) {
+//					nextNode = lobs.get(new Random().nextInt(lobs.size())).getLeft();
+//					compteur -=1;
+//				}
 			}
 			this.myAgent.doWait(500); // laisser passer
         }

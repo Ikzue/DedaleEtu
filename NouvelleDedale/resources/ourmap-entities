@@ -3,4 +3,4 @@ wumpus:Golem:0:free:200:0:1:0:0
 agentExplo:Explo1:1:free:-1:-1:0:1:1
 agentExplo:Explo2:1:free:-1:-1:0:2:1
 agentCollect:Collect1:5:free:41:-1:0:1:2
-agentTanker:Tanker1:1:1:300:200:0:1:5
+agentTanker:Tanker1:1:6:300:200:0:1:5

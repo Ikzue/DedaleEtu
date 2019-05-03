@@ -1,6 +1,7 @@
 package eu.su.mas.dedaleEtu.mas.behavioursTanker;
 
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
+import eu.su.mas.dedaleEtu.mas.behavioursCommon.ProtocoleInterBlocage;
 import jade.core.behaviours.FSMBehaviour;
 import eu.su.mas.dedaleEtu.mas.behavioursTanker.TankerRecevoirMessage;
 import eu.su.mas.dedaleEtu.mas.behavioursTanker.TankerEnvoieCarte;
@@ -30,11 +31,19 @@ public class TankerMultiBehaviour extends FSMBehaviour {
 		this.registerState(new TankerRecevoirMessage(myagent),"recevoirMessage");
 		this.registerState(new TankerEnvoieCarte(myagent),"repondre");
 		this.registerState(new IntegrerCarte(myagent), "integrerCarte");
+		this.registerState(new ProtocoleInterBlocage(myagent), "interBlocage");
+		this.registerState(new Retour(myagent), "retour");
+		this.registerState(new IntegrerCarte(myagent), "integrerCarte");				
 		//transitions
 		this.registerDefaultTransition("init","recevoirMessage"); 
 		this.registerDefaultTransition("recevoirMessage","recevoirMessage");
 		this.registerTransition("recevoirMessage","repondre",4);
+		this.registerTransition("recevoirMessage","interBlocage",5);
 		this.registerTransition("recevoirMessage","integrerCarte",1);
+		this.registerDefaultTransition("interBlocage","retour");
+		this.registerDefaultTransition("retour","retour");
+		this.registerTransition("retour","recevoirMessage",7);
+		this.registerTransition("retour","interBlocage",8);
 		this.registerDefaultTransition("integrerCarte","recevoirMessage");
 		this.registerDefaultTransition("repondre","recevoirMessage");
 	}

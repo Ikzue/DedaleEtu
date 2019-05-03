@@ -15,7 +15,7 @@ public class TankerMultiAgent extends BasicAgent{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1784844593772918359L;
+	private static final long serialVersionUID = -1784843333772918359L;
 	protected void setup(){
 
 		

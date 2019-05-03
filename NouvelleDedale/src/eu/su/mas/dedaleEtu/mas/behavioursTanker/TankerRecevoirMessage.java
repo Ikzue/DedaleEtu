@@ -40,6 +40,8 @@ public class TankerRecevoirMessage extends OneShotBehaviour{
 				    	   monAgent.yourCarte = ss[1];
 				    	   next = 1;
 				       }
+				       if (content.contains("InterBlocage") && (!monAgent.openNodes.isEmpty()))
+				    		   next = 5;
 			}
 			monAgent.receiver = msg.getSender().getLocalName();
 			/*

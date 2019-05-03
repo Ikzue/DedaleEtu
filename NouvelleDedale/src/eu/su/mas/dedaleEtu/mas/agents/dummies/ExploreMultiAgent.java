@@ -22,7 +22,7 @@ import jade.domain.DFService;
 
 public class ExploreMultiAgent extends BasicAgent {
 
-	private static final long serialVersionUID = -6431752665590433727L;
+	private static final long serialVersionUID = -6222752665590433727L;
 	public MapRepresentation myMap;
 	
 
