@@ -41,12 +41,18 @@ public class Depot extends OneShotBehaviour{
 			}
     	}
     }
-	private List<String> getCheminDepot(String myPosition){
-		if (monAgent.chemin.isEmpty()) {
-			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.tankerPosition); 
-		}
-		return monAgent.chemin;
+    
+	
+    private List<String> getCheminDepot(String myPosition){
+		return monAgent.myMap.getShortestPath(myPosition, monAgent.tankerPosition);
 	}
+//	
+//    private List<String> getCheminDepot(String myPosition){
+//		if (monAgent.chemin.isEmpty()) {
+//			monAgent.chemin = monAgent.myMap.getShortestPath(myPosition, monAgent.tankerPosition); 
+//		}
+//		return monAgent.chemin;
+//	}
     private void agent_wait(int T) {
 		try {
 			this.myAgent.doWait(500);
