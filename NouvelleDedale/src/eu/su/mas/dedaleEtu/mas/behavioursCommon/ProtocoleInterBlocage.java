@@ -114,7 +114,7 @@ public class ProtocoleInterBlocage extends OneShotBehaviour {
 					myNewPosition = ((AbstractDedaleAgent)this.myAgent).getCurrentPosition();
 					if (!myPosition.equals(myNewPosition)){
 						//System.out.println(this.myAgent.getLocalName()+ " move from "+ myPosition + " to "+myNewPosition);				
-						monAgent.chemin = null;
+						monAgent.chemin.clear();
 						break;
 					}
 				}

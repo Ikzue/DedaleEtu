@@ -68,8 +68,13 @@ public class MoveCollector extends OneShotBehaviour{
 	            	}
 	            	else {
 	            		//System.out.println("\"*****************GO TO TREASURE.****************************************************\"");
-		            	nextNode=getCheminTresor(myPosition).get(0);            	
-			            moveToTreasure(myPosition);
+		            	nextNode=getCheminTresor(myPosition).get(0);    
+		            	assert(nextNode != null);
+			            moveToTreasure(nextNode,myPosition);
+		                //si l'agent n'a pas reussi a se deplacer et que le testInterBllocage a reussit alors l'agent est dans un interblocage
+						Boolean succes = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
+		                if (!succes)
+		                	if (testInterBlocage(nextNode,myPosition)) next=8;
 	            	}
 				}
             	System.out.println("test4");
@@ -90,7 +95,8 @@ public class MoveCollector extends OneShotBehaviour{
 				
                 //si l'agent n'a pas reussi a se deplacer et que le testInterBllocage a reussit alors l'agent est dans un interblocage
 				Boolean succes = testMovementSucces(((AbstractDedaleAgent)this.myAgent).getCurrentPosition(),myPosition);
-                if (!succes && testInterBlocage(nextNode,myPosition)) next=8;
+                if (!succes)
+                	if (testInterBlocage(nextNode,myPosition)) next=8;
 			}
 			//endif
 		}
@@ -203,8 +209,7 @@ public class MoveCollector extends OneShotBehaviour{
 			((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
 		}
     }
-    private void moveToTreasure(String myPosition) {
-		String nextNode=getCheminTresor(myPosition).get(0);
+    private void moveToTreasure(String nextNode,String myPosition) {
 		if (!((AbstractDedaleAgent)this.myAgent).moveTo(nextNode)) {
 			monAgent.cheminTresor.clear();
 	      //  if (testInterBlocage(nextNode,myPosition)) next=8;
